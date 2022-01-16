@@ -1,0 +1,21 @@
+var nftokens = {
+    tokens: [
+        {
+            'uri': 'ipfs://',
+            'flags': 11,
+            'memo': 'nft 1/3'
+        },
+        {
+            'uri': 'ipfs://',
+            'flags': 11,
+            'memo': 'nft 2/3'
+        },
+        {
+            'uri': 'ipfs://',
+            'flags': 11,
+            'memo': 'nft 3/3'
+        }
+    ]
+};
+
+module.exports = nftokens;

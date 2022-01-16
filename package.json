@@ -1,0 +1,16 @@
+{
+  "name": "xrpl-nftoken-factory",
+  "version": "1.0.0",
+  "description": "Non fungible token factory made for the XRP Ledger.",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^12.0.4",
+    "xrpl": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Louis-Guillaume Carrier-Bédard",
+  "license": "MIT License"
+}
