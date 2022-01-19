@@ -4,6 +4,8 @@
   "description": "Non fungible token factory made for the XRP Ledger.",
   "main": "app.js",
   "dependencies": {
+    "@pinata/ipfs-gateway-tools": "^1.2.0",
+    "@pinata/sdk": "^1.1.23",
     "dotenv": "^12.0.4",
     "xrpl": "^2.1.1"
   },

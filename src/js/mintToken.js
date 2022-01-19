@@ -2,16 +2,19 @@ const xrpl = require('xrpl');
 
 const config = require('../../config/config');
 
+const IPFSGatewayTools = require('@pinata/ipfs-gateway-tools/dist/node');
+const gatewayTools = new IPFSGatewayTools();
+
 
 //***************************
 //** Mint Token *************
 //***************************
 module.exports = {
 	mintToken: async function (token) {
-		const wallet = xrpl.Wallet.fromSeed(config.wallet.secret)
-		const client = new xrpl.Client(config.server)
-		await client.connect()
-		console.log("Connected to Sandbox")
+		const wallet = xrpl.Wallet.fromSeed(config.wallet.secret);
+		const client = new xrpl.Client(config.server.address);
+		await client.connect();
+		console.log(`Minting NFToken...`);
 
 		const transactionBlob = {
 			TransactionType: "NFTokenMint",
@@ -28,18 +31,20 @@ module.exports = {
 			]
 		}
 		// Submit signed blob --------------------------------------------------------
-		const tx = await client.submitAndWait(transactionBlob, { wallet })
-
-		const nfts = await client.request({
-			method: "account_nfts",
-			account: wallet.classicAddress
-		})
-		console.log(nfts)
-
+		const tx = await client.submitAndWait(transactionBlob, { wallet });
+		
 		// Check transaction results -------------------------------------------------
-		console.log("Transaction result:", tx.result.meta.TransactionResult)
-		console.log("Balance changes:",
-			JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2))
+		console.log("Transaction result:", tx.result.meta.TransactionResult);
+		console.log(`NFToken minted:`, token);
+
+		const uriCID = gatewayTools.containsCID(token.uri);
+		if (uriCID.containsCid) {
+			const sourceUrl = token.uri;
+			const desiredGatewayPrefix = config.ipfs.desiredGatewayPrefix;
+			const convertedGatewayUrl = gatewayTools.convertToDesiredGateway(sourceUrl, desiredGatewayPrefix);
+			console.log(`IPFS Gateway: ${convertedGatewayUrl}`);
+		}
+
 		client.disconnect()
 	} //End of mintToken
 }
