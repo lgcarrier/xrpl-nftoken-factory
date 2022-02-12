@@ -1,4 +1,5 @@
 const config = require('../../config/config');
+const logger = require('./loggerService');
 
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK(config.pinataCloud.apiKey, config.pinataCloud.apiSecret);
@@ -7,15 +8,17 @@ module.exports = {
     testAuthentication: function () {
         pinata.testAuthentication().then((result) => {
             //handle successful authentication here
-            console.log(result);
+            logger.info(result);
         }).catch((err) => {
             //handle error here
-            console.log(err);
+            logger.error(err);
         });
     },
     pinFromFS: async function (token) {
-        console.log('start pinFromFS');
+        logger.info('Pinning IPFS...');
         const sourcePath = token.sourcePath;
+        // TODO::LGCARRIER
+        // implement the following metadata structure: https://docs.ipfs.io/how-to/best-practices-for-nft-data/#metadata
         const options = {
             pinataMetadata: {
                 name: token.name,
@@ -30,14 +33,17 @@ module.exports = {
         var cid = '';
         await pinata.pinFromFS(sourcePath, options).then((result) => {
             //handle results here
-            // console.log(result);
-            console.log('pinFromFS result',result);
+            // logger.info('pinFromFS response:');
+            // logger.info(result);
             cid = result.IpfsHash;
         }).catch((err) => {
             //handle error here
-            console.log(err);
+            logger.debug(err);
         });
-        console.log('pinFromFS cid', cid);
+        // logger.info(`pinFromFS cid: ${cid}`);
+
+        logger.info('IPFS pinned.');
+
         return cid;
 
     }
